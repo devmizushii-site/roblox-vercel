@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EZ Publish Service — Blue Sky Edition</title>
+<style>
+:root{color-scheme:dark;--bg:#071a3b;--panel:#102d5b;--panel2:#0b234b;--line:#244b7b;--sky:#55c7ff;--sky2:#2aa9ed;--white:#f4faff;--muted:#a9c8e8;--red:#ff9b9b;--green:#9bffb0}*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial,sans-serif;background:radial-gradient(circle at top,#16477c 0,#0a2852 38%,var(--bg) 80%);color:var(--white);min-height:100vh}.wrap{max-width:760px;margin:auto;padding:24px 16px 48px}header{text-align:center;padding:12px 0 22px}.logo{margin:auto auto 10px;width:54px;height:54px;border-radius:17px;background:linear-gradient(135deg,#8be0ff,#238fdb);display:grid;place-items:center;color:#06234a;font-weight:900;font-size:22px;box-shadow:0 8px 25px #0005}h1{font-size:26px;margin:0}header p{color:#9bdcff;margin:6px 0 0;font-size:13px;letter-spacing:1.5px}.tabs{display:flex;gap:8px;margin-bottom:14px}.tabs button{flex:1;background:#10284d;border:1px solid var(--line);color:var(--muted);padding:12px;border-radius:12px;font-weight:700}.tabs button.active{background:#174b7b;color:white;border-color:var(--sky)}.card{background:linear-gradient(160deg,#153967,#0d2851);border:1px solid #2b5785;border-radius:18px;padding:20px;margin-bottom:14px;box-shadow:0 12px 32px #0003}h2{font-size:18px;margin:0 0 6px}.desc,.hint,.small{color:var(--muted);font-size:13px;line-height:1.5}.desc{margin:0 0 18px}.field{margin:14px 0}.field label{display:block;font-size:12px;color:#b9dcf7;font-weight:800;letter-spacing:.7px;text-transform:uppercase;margin-bottom:7px}input{width:100%;border:1px solid #37628d;background:#071e40;color:white;border-radius:11px;padding:13px;font-size:15px;outline:none}input:focus{border-color:var(--sky);box-shadow:0 0 0 3px #55c7ff22}.btn{width:100%;border:0;border-radius:12px;padding:13px 16px;font-size:14px;font-weight:800;background:linear-gradient(135deg,var(--sky),var(--sky2));color:#05234a;cursor:pointer}.btn.secondary{background:#183f6c;color:#dff5ff;border:1px solid #3b6c9b}.btn:disabled{opacity:.55;cursor:not-allowed}.check{display:flex;align-items:center;gap:10px;color:#d7ecff;font-size:14px;margin:14px 0}.check input{width:18px;height:18px;accent-color:var(--sky)}.timer{font-size:28px;text-align:center;font-weight:900;color:var(--sky);padding:12px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat{background:#09234a;border:1px solid var(--line);padding:15px;border-radius:14px}.stat strong{display:block;font-size:28px;color:var(--sky)}.stat.fail strong{color:var(--red)}.status{border:1px solid var(--line);background:#09234a;padding:12px;border-radius:11px;color:var(--muted);font-size:13px;margin-top:12px}.status.ok{color:var(--green)}.status.err{color:var(--red)}.log{padding:12px;border:1px solid var(--line);border-radius:12px;background:#09234a;margin-top:9px;font-size:13px}.log small{display:block;color:var(--muted);margin-top:5px}.empty{text-align:center;color:var(--muted);padding:22px;border:1px dashed var(--line);border-radius:12px}.hidden{display:none}footer{text-align:center;color:#7799bc;font-size:11px;padding:10px}.pill{display:inline-block;border:1px solid #3b83b7;color:#9ee2ff;border-radius:30px;padding:4px 9px;font-size:11px;margin-bottom:12px}
+#loginBox{max-width:360px;margin:60px auto;padding:28px;background:#102d5b;border:1px solid #244b7b;border-radius:16px}
+@media(max-width:480px){.wrap{padding:16px 12px 36px}h1{font-size:23px}.card{padding:16px}}
+</style></head><body>
+
+<div id="loginBox" class="hidden">
+  <h2>EZ Publish Service</h2>
+  <input id="pw" type="password" placeholder="App password">
+  <button class="btn" id="loginBtn" style="margin-top:10px">Login</button>
+  <p id="loginErr" style="color:#ff9b9b;font-size:13px"></p>
+</div>
+
+<main class="wrap hidden" id="app">
+<header><div class="logo">EZ</div><h1>EZ Publish Service</h1><p>BLUE SKY EDITION · ROBLOX PLACE MANAGER</p></header>
+<nav class="tabs"><button class="active" id="createTab">Create Places</button><button id="historyTab">Logs / History</button></nav>
+<section id="createView">
+<div class="card"><span class="pill">ROBLOX CONNECTION</span><h2>Connect your Roblox account</h2><p class="desc">I-paste ang .ROBLOSECURITY cookie mo dito. Nananatili lang ito sa memorya ng tab na ito — hindi ito naka-save sa disk at nawawala pag sinara mo ang tab.</p>
+<div class="field"><label for="cookieInput">Roblox Cookie (.ROBLOSECURITY)</label><input id="cookieInput" type="password" placeholder="i-paste dito ang buong cookie value" autocomplete="off"></div>
+<button class="btn secondary" id="authorize">Connect / Authorize Roblox</button><div class="status" id="authStatus">Not connected yet.</div></div>
+<div class="card"><h2>Place Settings</h2><p class="desc">Bawat "place" dito ay BAGONG experience na kopya ng template place — hindi ito idinadagdag sa existing na laro mo.</p>
+<div class="field"><label for="template">Template Place ID</label><input id="template" value="95206881"></div>
+<div class="field"><label for="amount">Place Amount</label><input id="amount" type="number" min="1" max="100" placeholder="Enter amount (1–100)"></div>
+<label class="check"><input type="checkbox" id="private" checked> Create as Private Places (hindi pa suportado ng Roblox API na ito; cosmetic lang)</label>
+<button class="btn" id="start">START CREATE</button>
+<div class="timer hidden" id="timer"></div>
+<div class="status" id="status">Ready.</div></div>
+<div class="stats"><div class="stat"><strong id="created">0</strong>Created</div><div class="stat fail"><strong id="failed">0</strong>Failed</div></div>
+</section>
+<section id="historyView" class="hidden"><div class="card"><h2>Logs / History</h2><p class="desc">Activity sa browser session na ito.</p><div id="logs" class="empty">No activity yet.</div></div></section>
+<footer>EZ Publish Service · Blue Sky Edition · Vercel serverless backend</footer>
+</main>
+
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+let running=false, created=0, failed=0, history=[];
+// Nananatili lang ito sa JS memory ng tab na ito. Hindi naka-save sa disk,
+// localStorage, o kahit saan — nawawala pag nirefresh o sinara ang tab.
+let state={ cookie:null, csrfToken:null };
+
+function view(which){
+  $('createView').classList.toggle('hidden',which!=='create');
+  $('historyView').classList.toggle('hidden',which!=='history');
+  $('createTab').classList.toggle('active',which==='create');
+  $('historyTab').classList.toggle('active',which==='history');
+}
+$('createTab').onclick=()=>view('create');
+$('historyTab').onclick=()=>view('history');
+
+function log(title,detail){
+  history.unshift({title,detail,time:new Date().toLocaleString()});
+  $('logs').className='';
+  $('logs').innerHTML=history.map(x=>`<div class="log"><b>${x.title}</b><small>${x.time} · ${x.detail}</small></div>`).join('');
+}
+
+// ---- Login gate ----
+async function initAuth(){
+  const r=await fetch('/api/check-auth');
+  const d=await r.json();
+  if(!d.required || d.authed){
+    $('loginBox').classList.add('hidden');
+    $('app').classList.remove('hidden');
+  }else{
+    $('loginBox').classList.remove('hidden');
+    $('app').classList.add('hidden');
+  }
+}
+$('loginBtn').onclick=async()=>{
+  const password=$('pw').value;
+  const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password})});
+  if(r.ok){ initAuth(); } else { $('loginErr').textContent='Mali ang password.'; }
+};
+initAuth();
+
+// ---- Connect Roblox cookie ----
+$('authorize').onclick=async ()=>{
+  const cookie=$('cookieInput').value.trim();
+  if(!cookie){ $('authStatus').textContent='I-paste muna ang cookie mo sa field sa itaas.'; $('authStatus').className='status err'; return; }
+  $('authStatus').textContent='Kumokonekta...';
+  $('authStatus').className='status';
+  try{
+    const r=await fetch('/api/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cookie})});
+    const d=await r.json();
+    if(!d.connected){ $('authStatus').textContent=d.error||'Hindi connected.'; $('authStatus').className='status err'; return; }
+    state.cookie=cookie;
+    state.csrfToken=d.csrfToken;
+    $('cookieInput').value='';
+    $('authStatus').textContent=`Connected bilang ${d.username} (UserId ${d.userId})`;
+    $('authStatus').className='status ok';
+  }catch(e){
+    $('authStatus').textContent='Hindi ma-reach ang backend.';
+    $('authStatus').className='status err';
+  }
+};
+
+// ---- Create places ----
+async function createOne(templatePlaceId){
+  const r=await fetch('/api/create',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({cookie:state.cookie, csrfToken:state.csrfToken, templatePlaceId})
+  });
+  return r.json();
+}
+
+$('start').onclick=async ()=>{
+  if(running) return;
+  if(!state.cookie){ $('status').textContent='I-connect muna ang Roblox cookie mo sa taas.'; return; }
+  const templatePlaceId=Number($('template').value)||95206881;
+  const n=Number($('amount').value);
+  if(!Number.isInteger(n)||n<1||n>100){ $('status').textContent='Enter a whole number from 1 to 100.'; return; }
+
+  running=true;
+  $('start').disabled=true;
+  $('status').textContent=`Gumagawa ng ${n} place(s)...`;
+
+  for(let i=1;i<=n;i++){
+    $('timer').classList.remove('hidden');
+    $('timer').textContent=`${i}/${n}`;
+    try{
+      const res=await createOne(templatePlaceId);
+      if(res.csrfToken) state.csrfToken=res.csrfToken;
+      if(res.ok){
+        created++; $('created').textContent=created;
+        log('Place created',`placeId=${res.placeId}, universeId=${res.universeId}`);
+      }else{
+        failed++; $('failed').textContent=failed;
+        log('Create failed', res.error||'Unknown error');
+      }
+    }catch(e){
+      failed++; $('failed').textContent=failed;
+      log('Request error', String(e));
+    }
+    if(i<n) await new Promise(res=>setTimeout(res,2000));
+  }
+
+  $('timer').classList.add('hidden');
+  $('status').textContent=`Tapos na. Created: ${created}, Failed: ${failed}.`;
+  running=false;
+  $('start').disabled=false;
+};
+})();
+</script></body></html>
